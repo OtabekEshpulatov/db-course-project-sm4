@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS denormalized_model.tracks
     album_id         VARCHAR(255),
     artist_id        VARCHAR(255),
     playlist_id      VARCHAR(255),
-    genre_id         VARCHAR(255),
     duration_ms      INTEGER,
     time_signature   INTEGER,
     danceability     DOUBLE PRECISION,
@@ -23,7 +22,7 @@ CREATE TABLE IF NOT EXISTS denormalized_model.tracks
     instrumentalness DOUBLE PRECISION,
     liveness         DOUBLE PRECISION,
     valence          DOUBLE PRECISION,
-    tempo            DOUBLE PRECISION
+    tempo            DOUBLE precision
 );
 
 
@@ -31,7 +30,10 @@ CREATE TABLE IF NOT EXISTS denormalized_model.tracks
 CREATE TABLE IF NOT EXISTS denormalized_model.artists
 (
     artist_id         VARCHAR(255) PRIMARY KEY,
-    artist_name       VARCHAR(255)
+    artist_name       VARCHAR(255),
+    genre_id VARCHAR(255),
+    artist_popularity INTEGER
+    
 );
 
 -- Create dimension table: playlists
@@ -57,6 +59,7 @@ CREATE TABLE IF NOT EXISTS denormalized_model.genres
 );
 
 
+
 ALTER TABLE denormalized_model.tracks
     DROP CONSTRAINT IF EXISTS track_album_fk;
 ALTER TABLE denormalized_model.tracks
@@ -75,9 +78,8 @@ ALTER TABLE denormalized_model.tracks
     ADD CONSTRAINT track_playlist_fk FOREIGN KEY (playlist_id)
         REFERENCES denormalized_model.playlists (playlist_id);
 
-
-ALTER TABLE denormalized_model.tracks
-    DROP CONSTRAINT IF EXISTS track_genre_fk;
-ALTER TABLE denormalized_model.tracks
-    ADD CONSTRAINT track_genre_fk FOREIGN KEY (genre_id)
-        REFERENCES denormalized_model.genres (genre_id);
+ALTER TABLE denormalized_model.artists
+	DROP CONSTRAINT IF EXISTS artist_genre_fk;
+ALTER TABLE denormalized_model.artists
+	ADD CONSTRAINT artist_genre_fk FOREIGN KEY (genre_id)
+		REFERENCES denormalized_model.genres (genre_id);

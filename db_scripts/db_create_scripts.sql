@@ -26,7 +26,8 @@ CREATE TABLE IF NOT EXISTS public.tracks
 CREATE TABLE IF NOT EXISTS public.artists
 (
     "artist_id"   VARCHAR(255) PRIMARY KEY,
-    "artist_name" VARCHAR(255) NULL
+    "artist_name" VARCHAR(255) NULL,
+    "artist_popularity" INTEGER
 );
 CREATE TABLE IF NOT EXISTS public.playlist_tracks
 (

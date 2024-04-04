@@ -26,10 +26,10 @@ where not exists
           (select * from public.albums t where t.album_name = raw_albums_data.album_name);
 
 -- inserting artists data
-WITH raw_artists_data AS (select distinct e.artist_id, e.artist_name from public.playlists_data e)
+WITH raw_artists_data AS (select distinct e.artist_id, e.artist_name,e.artist_popularity from public.playlists_data e)
 insert
 into public.artists
-select raw_artists_data.artist_id, raw_artists_data.artist_name
+select raw_artists_data.artist_id, raw_artists_data.artist_name, raw_artists_data.artist_popularity
 from raw_artists_data
 where not exists(select * from public.artists t where t.artist_id = raw_artists_data.artist_id);
 
