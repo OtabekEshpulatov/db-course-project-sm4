@@ -12,8 +12,8 @@ from
 	order by
 		track_popularity desc ) as Row_Id
 	from
-		denormalized_model.tracks trc
-	join denormalized_model.playlists pls on
+		denormalized_model.fact_tracks trc
+	join denormalized_model.dim_playlists pls on
 		trc.playlist_id = pls.playlist_id)) as tp
 where
 	Row_Id <= 3;

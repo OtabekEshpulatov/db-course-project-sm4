@@ -27,41 +27,41 @@ $$
                      JOIN public.playlists pls on pls.playlist_id = pt.playlist_id
                      JOIN public.artist_genres ag on ag.artist_id = art.artist_id
                      JOIN public.genres gnr on gnr.genre_id = ag.genre_id
-            where not exists (select * from denormalized_model.tracks e where e.track_id = t.track_id )
+            where not exists (select * from denormalized_model.fact_tracks e where e.track_id = t.track_id )
             loop
 
-                -- inserting into denormalized_model.albums table
-                if not exists (select * from denormalized_model.albums e where e.album_id = den_data.album_id) then
+                -- inserting into denormalized_model.dim_albums table
+                if not exists (select * from denormalized_model.dim_albums e where e.album_id = den_data.album_id) then
                     insert
-                    into denormalized_model.albums(album_id, album_name)
+                    into denormalized_model.dim_albums(album_id, album_name)
                     values (den_data.album_id, den_data.album_name);
                 end if;
  
-               -- inserting into denormalized_model.genres table
+               -- inserting into denormalized_model.dim_genres table
                 if
-                    not exists(select * from denormalized_model.genres e where e.genre_id = den_data.genre_id) then
-                    insert into denormalized_model.genres(genre_id, genre_name)
+                    not exists(select * from denormalized_model.dim_genres e where e.genre_id = den_data.genre_id) then
+                    insert into denormalized_model.dim_genres(genre_id, genre_name)
                     values (den_data.genre_id, den_data.genre_name);
                 end if;
 
-                -- inserting into denormalized_model.artists table
+                -- inserting into denormalized_model.dim_artists table
                 if
-                    not exists(select * from denormalized_model.artists e where e.artist_id = den_data.artist_id) then
-                    insert into denormalized_model.artists(artist_id, artist_name,genre_id,artist_popularity)
+                    not exists(select * from denormalized_model.dim_artists e where e.artist_id = den_data.artist_id) then
+                    insert into denormalized_model.dim_artists(artist_id, artist_name,genre_id,artist_popularity)
                     values (den_data.artist_id, den_data.artist_name,den_data.genre_id, den_data.artist_popularity);
                 end if;
 
-                -- inserting into denormalized_model.playlists table
+                -- inserting into denormalized_model.dim_playlists table
                 if
                     not exists(select *
-                               from denormalized_model.playlists e
+                               from denormalized_model.dim_playlists e
                                where e.playlist_id = den_data.playlist_id) then
-                    insert into denormalized_model.playlists(playlist_id, playlist_url, year_)
+                    insert into denormalized_model.dim_playlists(playlist_id, playlist_url, year_)
                     values (den_data.playlist_id, den_data.playlist_url, den_data.year_);
                 end if;
 
-                -- inserting into denormalized_model.tracks table
-                insert into denormalized_model.tracks(track_id, track_name, track_popularity, album_id, artist_id,
+                -- inserting into denormalized_model.dim_tracks table
+                insert into denormalized_model.fact_tracks(track_id, track_name, track_popularity, album_id, artist_id,
                                                       playlist_id, duration_ms, time_signature, danceability,
                                                       energy, key_, loudness, mode_, speechiness, acousticness,
                                                       instrumentalness, liveness, valence, tempo)

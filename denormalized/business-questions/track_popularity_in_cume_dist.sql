@@ -8,4 +8,4 @@ order by
 	trc.track_popularity))::numeric,
 	3) as cume_dist
 from
-	denormalized_model.tracks trc;
+	denormalized_model.fact_tracks trc;
